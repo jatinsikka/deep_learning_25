@@ -1,0 +1,11 @@
+Train:
+  batch_size: 
+  learning_rate: 
+  reg: 
+  epochs: 
+  momentum: 
+  debug: True
+
+Model:
+  type: SoftmaxRegression # SoftmaxRegression or TwoLayerNet
+  #hidden_size: 128 # only applicable for TwolayerNet

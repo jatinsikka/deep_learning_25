@@ -1,0 +1,8 @@
+name: ori397-a1
+channels:
+  - defaults
+dependencies:
+  - numpy
+  - pyyaml
+  - matplotlib
+
