@@ -11,9 +11,9 @@ parser.add_argument('--config', default='./config.yaml')
 
 
 def main():
-    train_loss_history, train_acc_history, valid_loss_history, valid_acc_history = run()
+    train_loss_history, train_acc_history, valid_loss_history, valid_acc_history, hyperparams = run()
 
-    plot_curves(train_loss_history, train_acc_history, valid_loss_history, valid_acc_history)
+    plot_curves(train_loss_history, train_acc_history, valid_loss_history, valid_acc_history, hyperparams)
 
 def run():
     global args
@@ -70,8 +70,20 @@ def run():
     if args.debug:
         print("Final Accuracy on Test Data: {accuracy:.4f}".format(accuracy=test_acc))
 
+    # Collect hyperparameters for plotting
+    hyperparams = {
+        'type': args.type,
+        'learning_rate': args.learning_rate,
+        'reg': args.reg,
+        'batch_size': args.batch_size,
+        'epochs': args.epochs
+    }
+    
+    # Add hidden_size for TwoLayerNet
+    if hasattr(args, 'hidden_size'):
+        hyperparams['hidden_size'] = args.hidden_size
 
-    return train_loss_history, train_acc_history, valid_loss_history, valid_acc_history
+    return train_loss_history, train_acc_history, valid_loss_history, valid_acc_history, hyperparams
 if __name__ == '__main__':
     main()
 

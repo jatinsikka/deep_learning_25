@@ -1,4 +1,5 @@
 # Do not use packages that are not in standard distribution of python
+
 import numpy as np
 
 class _baseNetwork:
@@ -16,7 +17,7 @@ class _baseNetwork:
     def forward(self):
         pass
 
-    def softmax(self, scores):
+    def softmax(self, scores): #!
         '''
         Compute softmax scores given the raw output from the model
 
@@ -26,7 +27,7 @@ class _baseNetwork:
         '''
         prob = None
         #############################################################################
-        # TODO:                                                                     #
+        # :                                                                     #
         #    1) Calculate softmax scores of input images                            #
         #############################################################################
         
@@ -39,7 +40,7 @@ class _baseNetwork:
 
         return prob 
 
-    def cross_entropy_loss(self, x_pred, y):
+    def cross_entropy_loss(self, x_pred, y): #!
         '''
         Compute Cross-Entropy Loss based on prediction of the network and labels
         :param x_pred: Probabilities from the two-layer net (N, num_classes)
@@ -48,7 +49,7 @@ class _baseNetwork:
         '''
         loss = None
         #############################################################################
-        # TODO:                                                                     #
+        # :                                                                     #
         #    1) Implement Cross-Entropy Loss                                        #
         #############################################################################
 
@@ -63,7 +64,7 @@ class _baseNetwork:
         #############################################################################
         return loss 
 
-    def compute_accuracy(self, x_pred, y):
+    def compute_accuracy(self, x_pred, y): #!
         '''
         Compute the accuracy of current batch
         :param x_pred: Probabilities from the two-layer net (N, num_classes)
@@ -72,16 +73,14 @@ class _baseNetwork:
         '''
         acc = None
         #############################################################################
-        # TODO:                                                                     #
+        # :                                                                     #
         #    1) Implement the accuracy function                                     #
         #############################################################################
 
-        # Get predicted class (index of maximum probability)
         predicted_classes = np.argmax(x_pred, axis=1)
         
-        # Compare predictions with true labels and calculate accuracy
-        correct_predictions = np.sum(predicted_classes == y)
-        acc = correct_predictions / len(y)
+        # correct prediction / all predictions
+        acc = np.sum(predicted_classes == y) / len(y)
 
         #############################################################################
         #                              END OF YOUR CODE                             #
@@ -98,7 +97,7 @@ class _baseNetwork:
         '''
         out = None
         #############################################################################
-        # TODO: Comput the sigmoid activation on the input                          #
+        # : Comput the sigmoid activation on the input                          #
         #############################################################################
 
         out = 1 / (1 + np.exp(-X))
@@ -116,7 +115,7 @@ class _baseNetwork:
         '''
         ds = None
         #############################################################################
-        # TODO:                                                                     #
+        # :                                                                     #
         #    1) Implement the derivative of Sigmoid function                        #
         #############################################################################
 
@@ -137,7 +136,7 @@ class _baseNetwork:
         '''
         out = None
         #############################################################################
-        # TODO: Comput the ReLU activation on the input                          #
+        # : Comput the ReLU activation on the input                          #
         #############################################################################
 
         out = np.maximum(0, X)
@@ -156,7 +155,7 @@ class _baseNetwork:
         '''
         out = None
         #############################################################################
-        # TODO: Comput the gradient of ReLU activation                              #
+        # : Comput the gradient of ReLU activation                              #
         #############################################################################
 
         out = np.where(X > 0, 1.0, 0.0)

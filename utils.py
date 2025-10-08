@@ -16,7 +16,7 @@ def load_csv(path):
     '''
     data = []
     labels = []
-    with open(path, 'r') as fp:
+    with open(path, 'r', encoding='utf-8', errors='ignore') as fp:
         images = fp.readlines()
         images = [img.rstrip() for img in images]
 
@@ -51,7 +51,7 @@ def load_mnist_trainval():
     val_data = None
     val_label = None
     #############################################################################
-    # TODO:                                                                     #
+    #                                                                    #
     #    1) Split the entire training set to training data and validation       #
     #       data. Use 80% of your data for training and 20% of your data for    #
     #       validation                                                          #
@@ -106,7 +106,7 @@ def generate_batched_data(data, label, batch_size=32, shuffle=False, seed=None):
     if seed:
         random.seed(seed)
     #############################################################################
-    # TODO:
+    # 
     #    1) Shuffle data using random.shuffle and label if shuffle=True         #
     #    2) Generate batches of images with the required batch size             #
     #    It's okay if the size of your last batch is smaller than the required  #
@@ -120,7 +120,9 @@ def generate_batched_data(data, label, batch_size=32, shuffle=False, seed=None):
         data = [data[i] for i in indices]
         label = [label[i] for i in indices]
     
-    batched_data = [], batched_label = []
+    # Initialize batch lists
+    batched_data = []
+    batched_label = []
     
     for i in range(0, len(data), batch_size):
         # Get batch slice (last batch might be smaller)
@@ -210,7 +212,7 @@ def evaluate(batched_test_data, batched_test_label, model, debug=True):
     return epoch_loss, epoch_acc
 
 
-def plot_curves(train_loss_history, train_acc_history, valid_loss_history, valid_acc_history):
+def plot_curves(train_loss_history, train_acc_history, valid_loss_history, valid_acc_history, hyperparams=None):
     '''
     Plot learning curves with matplotlib. Make sure training loss and validation loss are plot in the same figure and
     training accuracy and validation accuracy are plot in the same figure too.
@@ -218,15 +220,47 @@ def plot_curves(train_loss_history, train_acc_history, valid_loss_history, valid
     :param train_acc_history: training accuracy history of epochs
     :param valid_loss_history: validation loss history of epochs
     :param valid_acc_history: validation accuracy history of epochs
+    :param hyperparams: Dictionary containing hyperparameters to display on plots
     :return: None, save two figures in the current directory
     '''
     #############################################################################
-    # TODO:                                                                     #
+    # :                                                                     #
     #    1) Plot learning curves of training and validation loss                #
     #    2) Plot learning curves of training and validation accuracy            #
     #############################################################################
     
+    # Create epochs array for x-axis
+    epochs = range(1, len(train_loss_history) + 1)
+    
+    # Create figure with two subplots side by side
+    plt.figure(figsize=(12, 5))
+    
+    # Plot 1: Loss curves
+    plt.subplot(1, 2, 1)
+    plt.plot(epochs, train_loss_history, 'b-', label='Training Loss', linewidth=2)
+    plt.plot(epochs, valid_loss_history, 'r-', label='Validation Loss', linewidth=2)
+    plt.title('Loss', fontsize=14, fontweight='bold')
+    plt.xlabel('Epochs', fontsize=12)
+    plt.ylabel('Loss', fontsize=12)
+    plt.legend(fontsize=10)
+    plt.grid(True, alpha=0.3)
+    
+    # Plot 2: Accuracy curves
+    plt.subplot(1, 2, 2)
+    plt.plot(epochs, train_acc_history, 'b-', label='Training Accuracy', linewidth=2)
+    plt.plot(epochs, valid_acc_history, 'r-', label='Validation Accuracy', linewidth=2)
+    plt.title('Accuracy', fontsize=14, fontweight='bold')
+    plt.xlabel('Epochs', fontsize=12)
+    plt.ylabel('Accuracy', fontsize=12)
+    plt.legend(fontsize=10)
+    plt.grid(True, alpha=0.3)
+    
+    # Adjust layout and save
+    plt.tight_layout()
+    plt.savefig('learning_curves.png', dpi=300, bbox_inches='tight')
+    print("Learning curves saved to 'learning_curves.png'")
+    plt.show()
     
     #############################################################################
-    #                              END OF YOUR                              #
-    #######################################CODE#################################
+    #                              END OF YOUR CODE                             #
+    #############################################################################

@@ -3,6 +3,7 @@ import numpy as np
 np.random.seed(1024)
 from ._base_network import _baseNetwork
 
+# 
 class TwoLayerNet(_baseNetwork):
     def __init__(self, input_size=28 * 28, num_classes=10, hidden_size=128):
         super().__init__(input_size, num_classes)
@@ -54,7 +55,7 @@ class TwoLayerNet(_baseNetwork):
         loss = None
         accuracy = None
         #############################################################################
-        # TODO:                                                                     #
+        #                                                                    #
         #    1) Implement the forward process:                                      #
         #        1) Call sigmoid function between the two layers for non-linearity  #
         #        2) The output of the second layer should be passed to softmax      #
@@ -66,16 +67,16 @@ class TwoLayerNet(_baseNetwork):
         # Forward pass: Input -> FC1 -> Sigmoid -> FC2 -> Softmax -> Loss
         
         # Step 1: First fully connected layer (with bias)
-        h1 = np.dot(X, self.weights['W1']) + self.weights['b1']  
+        fc1 = np.dot(X, self.weights['W1']) + self.weights['b1']  
         
         # Step 2: Sigmoid activation
-        a1 = self.sigmoid(h1)  # Shape: (N, hidden_size)
+        a1 = self.sigmoid(fc1)  
         
         # Step 3: Second fully connected layer (with bias)
-        h2 = np.dot(a1, self.weights['W2']) + self.weights['b2']  # Shape: (N, num_classes)
+        fc2 = np.dot(a1, self.weights['W2']) + self.weights['b2'] 
         
         # Step 4: Softmax to get probabilities
-        prob = self.softmax(h2)  # Shape: (N, num_classes)
+        prob = self.softmax(fc2)  
         
         # Step 5: Compute loss and accuracy
         loss = self.cross_entropy_loss(prob, y)
@@ -89,7 +90,7 @@ class TwoLayerNet(_baseNetwork):
             return loss, accuracy
 
         #############################################################################
-        # TODO:                                                                     #
+        #                                         #
         #    1) Implement the backward process:                                     #
         #        1) Compute gradients of each weight and bias by chain rule         #
         #        2) Store the gradients in self.gradients                           #
@@ -99,8 +100,8 @@ class TwoLayerNet(_baseNetwork):
         #          the sigmoid function in self.sigmoid_dev first                   #
         #############################################################################
         
-        # Backward pass: compute gradients using chain rule
-        N = X.shape[0]  # batch size
+        # Note: AI helped me visualise this section
+        N = X.shape[0]  
         
         # Step 1: Gradient from cross-entropy + softmax (output layer)
         dL_dh2 = prob.copy()
@@ -108,18 +109,18 @@ class TwoLayerNet(_baseNetwork):
         dL_dh2 /= N  # Average over batch
         
         # Step 2: Gradients for W2 and b2 (second layer)
-        self.gradients['W2'] = np.dot(a1.T, dL_dh2)  # (hidden_size, num_classes)
-        self.gradients['b2'] = np.sum(dL_dh2, axis=0)  # (num_classes,)
+        self.gradients['W2'] = np.dot(a1.T, dL_dh2)  
+        self.gradients['b2'] = np.sum(dL_dh2, axis=0)  
         
         # Step 3: Gradient flowing back to hidden layer
-        dL_da1 = np.dot(dL_dh2, self.weights['W2'].T)  # (N, hidden_size)
+        dL_da1 = np.dot(dL_dh2, self.weights['W2'].T) 
         
         # Step 4: Gradient through sigmoid activation
-        dL_dh1 = dL_da1 * self.sigmoid_dev(h1)  # Element-wise multiplication
+        dL_dh1 = dL_da1 * self.sigmoid_dev(fc1)  # Element-wise multiplication
         
         # Step 5: Gradients for W1 and b1 (first layer)
-        self.gradients['W1'] = np.dot(X.T, dL_dh1)  # (input_size, hidden_size)
-        self.gradients['b1'] = np.sum(dL_dh1, axis=0)  # (hidden_size,)
+        self.gradients['W1'] = np.dot(X.T, dL_dh1)  
+        self.gradients['b1'] = np.sum(dL_dh1, axis=0)  
         
         #############################################################################
         #                              END OF YOUR CODE                             #

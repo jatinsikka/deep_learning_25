@@ -3,6 +3,7 @@ import numpy as np
 
 from ._base_network import _baseNetwork
 
+# 
 class SoftmaxRegression(_baseNetwork):
     def __init__(self, input_size=28*28, num_classes=10):
         '''
@@ -38,7 +39,7 @@ class SoftmaxRegression(_baseNetwork):
         gradient = None
         accuracy = None
         #############################################################################
-        # TODO:                                                                     #
+        #                                                                   #
         #    1) Implement the forward process and compute the Cross-Entropy loss    #
         # Hint:                                                                     #
         #   Store your intermediate outputs before ReLU for backwards               #
@@ -46,10 +47,10 @@ class SoftmaxRegression(_baseNetwork):
         
         # Forward pass: fcl -> ReLU -> Softmax
         # Step 1: fully connected layer
-        z1 = np.dot(X, self.weights['W1'])  # Shape: (N, num_classes)
+        fc1 = np.dot(X, self.weights['W1']) 
         
         # Step 2: ReLU activation
-        a1 = self.ReLU(z1)  # Store for backward pass
+        a1 = self.ReLU(fc1)  # Store for backward pass
         
         # Step 3: Softmax to get probabilities
         prob = self.softmax(a1)
@@ -66,7 +67,7 @@ class SoftmaxRegression(_baseNetwork):
             return loss, accuracy
 
         #############################################################################
-        # TODO:                                                                     #
+        #                                                                    #
         #    1) Implement the backward process:                                     #
         #        1) Compute gradients of each weight and bias by chain rule         #
         #        2) Store the gradients in self.gradients                           #
@@ -76,17 +77,15 @@ class SoftmaxRegression(_baseNetwork):
         N = X.shape[0]  # batch size
         
         # Step 1: Gradient from cross-entropy + softmax
-        # For softmax + cross-entropy, the gradient is: (prob - one_hot_labels)
-        dL_da1 = prob.copy()
-        dL_da1[np.arange(N), y] -= 1  # Subtract 1 from correct class positions
-        dL_da1 /= N  # Average over batch
+        grad_1 = prob.copy()
+        grad_1[np.arange(N), y] -= 1  # AI helped me with this
+        grad_1 /= N  
         
         # Step 2: Gradient through ReLU activation
-        dL_dz1 = dL_da1 * self.ReLU_dev(z1)  # Element-wise multiplication
+        grad_relu = grad_1 * self.ReLU_dev(fc1)  
         
         # Step 3: Gradient with respect to weights W1
-        # dL/dW1 = X^T @ dL/dz1
-        self.gradients['W1'] = np.dot(X.T, dL_dz1)
+        self.gradients['W1'] = np.dot(X.T, grad_relu)
 
         #############################################################################
         #                              END OF YOUR CODE                             #

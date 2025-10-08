@@ -13,10 +13,13 @@ class SGD(_BaseOptimizer):
         '''
         self.apply_regularization(model)
         #############################################################################
-        # TODO:                                                                     #
+        # :                                                                     #
         #    1) Update model weights based on the learning rate and gradients       #
         #############################################################################
 
+        # SGD update rule: θ(t+1) = θ(t) - η∇θJ(θ)
+        for key in model.weights:
+            model.weights[key] -= self.learning_rate * model.gradients[key]
 
         #############################################################################
         #                              END OF YOUR CODE                             #

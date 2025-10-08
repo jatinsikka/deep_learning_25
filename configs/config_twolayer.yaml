@@ -1,8 +1,8 @@
 Train:
   batch_size: 64
-  learning_rate: 0.1
-  reg: 0.001
-  epochs: 10
+  learning_rate: .9
+  reg: 0.00005
+  epochs: 20
   momentum: 0.9
   debug: True
 
